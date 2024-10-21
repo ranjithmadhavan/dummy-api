@@ -45,11 +45,19 @@ router.put("/posts/:id", (req, res) => {
 
 // DELETE a post
 router.delete("/posts/:id", (req, res) => {
-    const index = posts.findIndex((p) => p.id === parseInt(req.params.id));
-    if (index === -1) return res.status(404).json({ message: "Post not found" });
+    let index = -1;
+    try {
+        index = posts.findIndex((p) => p.id === parseInt(req.params.id));
+    } catch (err) {
+        // do nothong
+    }
 
-    const deletedPost = posts.splice(index, 1);
-    res.json(deletedPost[0]);
+    // if (index === -1) return res.status(404).json({ message: "Post not found" });
+    if (index !== -1) posts.splice(index, 1);
+    res.json({
+        status: "success",
+        Message: "Post deleted successfully.",
+    });
 });
 
 module.exports = router;
